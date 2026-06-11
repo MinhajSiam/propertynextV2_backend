@@ -3,6 +3,7 @@ const router = express.Router();
 const Project = require('../models/Project');
 
 // ১. নতুন প্রজেক্ট যুক্ত করা (Create Project)
+// এখানে req.body থাকায় brochureUrl, structuralFeatures সহ সব ডেটা অটোমেটিক সেভ হবে
 router.post('/add', async (req, res) => {
     try {
         const newProject = new Project(req.body);
@@ -24,7 +25,6 @@ router.post('/add', async (req, res) => {
 // ২. সব প্রজেক্ট একসাথে দেখা (Get All Projects)
 router.get('/all', async (req, res) => {
     try {
-        // নতুন প্রজেক্ট আগে দেখানোর জন্য sort করা হয়েছে
         const projects = await Project.find().sort({ createdAt: -1 });
         res.status(200).json({
             success: true,
@@ -61,29 +61,19 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// ৫. প্রজেক্ট আপডেট করা (Update Project)
+// ۵. প্রজেক্ট আপডেট করা (Update Project)
+// এখানেও req.body সরাসরি পাস হওয়ায় নতুন ফিল্ডগুলো ডেটাবেসে আপডেট হতে কোনো বাধা নেই
 router.put('/:id', async (req, res) => {
     try {
         const updatedProject = await Project.findByIdAndUpdate(
             req.params.id,
             req.body,
-            { new: true } // নতুন আপডেট হওয়া ডেটা রিটার্ন করবে
+            { new: true }
         );
         if (!updatedProject) return res.status(404).json({ success: false, message: "Project not found" });
         res.status(200).json({ success: true, message: "Project updated successfully", data: updatedProject });
     } catch (error) {
         res.status(500).json({ success: false, message: "Error updating project", error: error.message });
-    }
-});
-
-// ৬. একটি নির্দিষ্ট প্রজেক্টের ডেটা আনা (Get Single Project by ID)
-router.get('/:id', async (req, res) => {
-    try {
-        const project = await Project.findById(req.req.params.id);
-        if (!project) return res.status(404).json({ success: false, message: "Project not found" });
-        res.status(200).json({ success: true, data: project });
-    } catch (error) {
-        res.status(500).json({ success: false, message: "Error fetching project details" });
     }
 });
 
