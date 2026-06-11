@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
+
     title: { type: String, required: true },
     location: { type: String, required: true },
     status: { type: String, required: true, default: 'upcoming' },
     mainImage: { type: String, required: true },
+    brochureUrl: { type: String }, // প্রজেক্ট ব্রোশিওর ডাউনলোডের লিংক
 
     landArea: { type: String },
     facing: { type: String },
@@ -32,5 +34,7 @@ const projectSchema = new mongoose.Schema({
     mapUrl: { type: String }
 
 }, { timestamps: true });
+
+
 
 module.exports = mongoose.model('Project', projectSchema);
