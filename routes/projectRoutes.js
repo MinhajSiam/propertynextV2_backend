@@ -76,4 +76,15 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// ৬. একটি নির্দিষ্ট প্রজেক্টের ডেটা আনা (Get Single Project by ID)
+router.get('/:id', async (req, res) => {
+    try {
+        const project = await Project.findById(req.req.params.id);
+        if (!project) return res.status(404).json({ success: false, message: "Project not found" });
+        res.status(200).json({ success: true, data: project });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error fetching project details" });
+    }
+});
+
 module.exports = router;
