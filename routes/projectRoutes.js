@@ -61,4 +61,19 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// ৫. প্রজেক্ট আপডেট করা (Update Project)
+router.put('/:id', async (req, res) => {
+    try {
+        const updatedProject = await Project.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true } // নতুন আপডেট হওয়া ডেটা রিটার্ন করবে
+        );
+        if (!updatedProject) return res.status(404).json({ success: false, message: "Project not found" });
+        res.status(200).json({ success: true, message: "Project updated successfully", data: updatedProject });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error updating project", error: error.message });
+    }
+});
+
 module.exports = router;
