@@ -13,8 +13,8 @@ router.post('/add', async (req, res) => {
         // ----------------------------------------------------
         // [A] Telegram-এ মেসেজ পাঠানো
         // ----------------------------------------------------
-        const telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // ধাপ ১ থেকে পাওয়া টোকেন বসান
-        const chatId = 'YOUR_CHAT_ID'; // ধাপ ১ থেকে পাওয়া চ্যাট আইডি বসান
+        const telegramToken = '8667931377:AAG_mI-1IR5kvkbY3yfw2sbhBNtbY0D_Gec'; // ধাপ ১ থেকে পাওয়া টোকেন বসান
+        const chatId = '5196102046'; // ধাপ ১ থেকে পাওয়া চ্যাট আইডি বসান
 
         const telegramMsg = `🔔 <b>New Lead Alert!</b>\n\n👤 <b>Name:</b> ${name}\n📞 <b>Phone:</b> ${phone}\n📧 <b>Email:</b> ${email || 'N/A'}\n🏢 <b>Project:</b> ${interest || 'N/A'}\n💬 <b>Message:</b> ${message || 'N/A'}`;
 
@@ -32,7 +32,7 @@ router.post('/add', async (req, res) => {
         // ----------------------------------------------------
         // [B] Google Sheet-এ ডেটা পাঠানো
         // ----------------------------------------------------
-        const googleSheetWebhookUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // ধাপ ২ থেকে পাওয়া Web app URL বসান
+        const googleSheetWebhookUrl = 'https://script.google.com/macros/s/AKfycbyz6ER2aXevifk4FQ8u62hTmgW1kLwv_sMe19W46LXfytTzXuuUc-4FNueJgsD8xME/exec'; // ধাপ ২ থেকে পাওয়া Web app URL বসান
 
         fetch(googleSheetWebhookUrl, {
             method: 'POST',
