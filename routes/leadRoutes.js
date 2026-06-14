@@ -2,12 +2,38 @@ const express = require('express');
 const router = express.Router();
 const Lead = require('../models/Lead');
 
-// ১. নতুন লিড যুক্ত করার API (পাবলিক ওয়েবসাইটের ফর্ম থেকে আসবে)
 router.post('/add', async (req, res) => {
     try {
         const newLead = new Lead(req.body);
-        await newLead.save();
-        res.status(201).json({ success: true, message: "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে। আমাদের টিম দ্রুত আপনার সাথে যোগাযোগ করবে।" });
+        await newLead.save(); // ডেটাবেসে সেভ হলো
+
+        // ----------------------------------------------------
+        // ১. Telegram এ মেসেজ পাঠানো
+        // ----------------------------------------------------
+        const telegramToken = 'YOUR_BOT_TOKEN_HERE';
+        const chatId = 'YOUR_CHAT_ID_HERE';
+        const telegramMsg = `🔔 <b>New Lead Alert!</b>\n\n👤 <b>Name:</b> ${req.body.name}\n📞 <b>Phone:</b> ${req.body.phone}\n📧 <b>Email:</b> ${req.body.email || 'N/A'}\n🏢 <b>Project:</b> ${req.body.interest}\n💬 <b>Message:</b> ${req.body.message || 'N/A'}`;
+
+        fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: telegramMsg, parse_mode: 'HTML' })
+        }).catch(err => console.error('Telegram Error:', err));
+
+        // ----------------------------------------------------
+        // ২. Google Sheet এ ডেটা পাঠানো
+        // ----------------------------------------------------
+        const googleSheetWebhookUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+        fetch(googleSheetWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body)
+        }).catch(err => console.error('Sheet Error:', err));
+
+        // সবশেষে ফ্রন্টএন্ডে সাকসেস মেসেজ পাঠানো
+        res.status(201).json({ success: true, message: "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।" });
+
     } catch (error) {
         console.error("Lead Add Error:", error);
         res.status(500).json({ success: false, message: "সার্ভারে সমস্যা হয়েছে, আবার চেষ্টা করুন।" });
