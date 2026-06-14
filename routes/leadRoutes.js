@@ -2,37 +2,46 @@ const express = require('express');
 const router = express.Router();
 const Lead = require('../models/Lead');
 
+// ১. নতুন লিড যুক্ত করার API (টেলিগ্রাম এবং গুগল শিট সহ)
 router.post('/add', async (req, res) => {
     try {
         const newLead = new Lead(req.body);
         await newLead.save(); // ডেটাবেসে সেভ হলো
 
-        // ----------------------------------------------------
-        // ১. Telegram এ মেসেজ পাঠানো
-        // ----------------------------------------------------
-        const telegramToken = 'YOUR_BOT_TOKEN_HERE';
-        const chatId = 'YOUR_CHAT_ID_HERE';
-        const telegramMsg = `🔔 <b>New Lead Alert!</b>\n\n👤 <b>Name:</b> ${req.body.name}\n📞 <b>Phone:</b> ${req.body.phone}\n📧 <b>Email:</b> ${req.body.email || 'N/A'}\n🏢 <b>Project:</b> ${req.body.interest}\n💬 <b>Message:</b> ${req.body.message || 'N/A'}`;
+        const { name, phone, email, interest, message } = req.body;
 
+        // ----------------------------------------------------
+        // [A] Telegram-এ মেসেজ পাঠানো
+        // ----------------------------------------------------
+        const telegramToken = 'YOUR_TELEGRAM_BOT_TOKEN'; // ধাপ ১ থেকে পাওয়া টোকেন বসান
+        const chatId = 'YOUR_CHAT_ID'; // ধাপ ১ থেকে পাওয়া চ্যাট আইডি বসান
+
+        const telegramMsg = `🔔 <b>New Lead Alert!</b>\n\n👤 <b>Name:</b> ${name}\n📞 <b>Phone:</b> ${phone}\n📧 <b>Email:</b> ${email || 'N/A'}\n🏢 <b>Project:</b> ${interest || 'N/A'}\n💬 <b>Message:</b> ${message || 'N/A'}`;
+
+        // টেলিগ্রাম API কল (await দেওয়া হয়নি যাতে ইউজারের পেজ লোড হতে দেরি না হয়)
         fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: telegramMsg, parse_mode: 'HTML' })
-        }).catch(err => console.error('Telegram Error:', err));
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: telegramMsg,
+                parse_mode: 'HTML'
+            })
+        }).catch(err => console.error('Telegram Fetch Error:', err));
 
         // ----------------------------------------------------
-        // ২. Google Sheet এ ডেটা পাঠানো
+        // [B] Google Sheet-এ ডেটা পাঠানো
         // ----------------------------------------------------
-        const googleSheetWebhookUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        const googleSheetWebhookUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // ধাপ ২ থেকে পাওয়া Web app URL বসান
 
         fetch(googleSheetWebhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(req.body)
-        }).catch(err => console.error('Sheet Error:', err));
+        }).catch(err => console.error('Google Sheet Fetch Error:', err));
 
-        // সবশেষে ফ্রন্টএন্ডে সাকসেস মেসেজ পাঠানো
-        res.status(201).json({ success: true, message: "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।" });
+        // সবশেষে ফ্রন্টএন্ডে কাস্টমারকে সাকসেস মেসেজ পাঠানো
+        res.status(201).json({ success: true, message: "আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে। আমাদের টিম দ্রুত আপনার সাথে যোগাযোগ করবে।" });
 
     } catch (error) {
         console.error("Lead Add Error:", error);
