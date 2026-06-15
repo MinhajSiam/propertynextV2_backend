@@ -61,21 +61,20 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// ۵. প্রজেক্ট আপডেট করা (Update Project)
-// এখানেও req.body সরাসরি পাস হওয়ায় নতুন ফিল্ডগুলো ডেটাবেসে আপডেট হতে কোনো বাধা নেই
-router.put('/:id', async (req, res) => {
+
+
+// নির্দিষ্ট একটি প্রজেক্টের বিস্তারিত তথ্য পাঠানোর API
+router.get('/:id', async (req, res) => {
     try {
-        const updatedProject = await Project.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
-        if (!updatedProject) return res.status(404).json({ success: false, message: "Project not found" });
-        res.status(200).json({ success: true, message: "Project updated successfully", data: updatedProject });
+        const project = await Project.findById(req.params.id);
+        if (!project) {
+            return res.status(404).json({ success: false, message: "প্রজেক্টটি পাওয়া যায়নি" });
+        }
+        res.status(200).json({ success: true, data: project });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Error updating project", error: error.message });
+        console.error("Single Project Fetch Error:", error);
+        res.status(500).json({ success: false, message: "সার্ভার এরর" });
     }
 });
-
 
 module.exports = router;
