@@ -23,6 +23,7 @@ const leadSchema = new mongoose.Schema({
         type: String,
         default: 'New' // New, Contacted, Rejected, Deal Closed
     }
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Lead', leadSchema);
