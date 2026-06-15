@@ -14,7 +14,7 @@ router.post('/add', async (req, res) => {
         // [A] Telegram-এ মেসেজ পাঠানো
         // ----------------------------------------------------
         const telegramToken = '8667931377:AAG_mI-1IR5kvkbY3yfw2sbhBNtbY0D_Gec'; // ধাপ ১ থেকে পাওয়া টোকেন বসান
-        const chatId = '5196102046'; // ধাপ ১ থেকে পাওয়া চ্যাট আইডি বসান
+        const chatId = '-5342084527';
 
         const telegramMsg = `🔔 <b>New Lead Alert!</b>\n\n👤 <b>Name:</b> ${name}\n📞 <b>Phone:</b> ${phone}\n📧 <b>Email:</b> ${email || 'N/A'}\n🏢 <b>Project:</b> ${interest || 'N/A'}\n💬 <b>Message:</b> ${message || 'N/A'}`;
 
