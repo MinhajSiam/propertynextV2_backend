@@ -81,4 +81,15 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.get('/all', async (req, res) => {
+    try {
+        const leads = await Lead.find().sort({ createdAt: -1 }); // নতুন লিডগুলো একদম ওপরে দেখাবে
+        res.status(200).json({ success: true, data: leads });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "সার্ভার এরর" });
+    }
+});
+
+
+
 module.exports = router;
