@@ -90,6 +90,32 @@ router.get('/all', async (req, res) => {
     }
 });
 
+// লিডের স্ট্যাটাস আপডেট করার API
+router.patch('/:id/status', async (req, res) => {
+    try {
+        const updatedLead = await Lead.findByIdAndUpdate(
+            req.params.id,
+            { status: req.body.status },
+            { new: true }
+        );
+        res.status(200).json({ success: true, data: updatedLead, message: "স্ট্যাটাস আপডেট হয়েছে" });
+    } catch (error) {
+        console.error("Status Update Error:", error);
+        res.status(500).json({ success: false, message: "সার্ভার এরর" });
+    }
+});
+
+// লিড ডিলিট করার API
+router.delete('/:id', async (req, res) => {
+    try {
+        await Lead.findByIdAndDelete(req.params.id);
+        res.status(200).json({ success: true, message: "লিড সফলভাবে ডিলিট হয়েছে" });
+    } catch (error) {
+        console.error("Delete Lead Error:", error);
+        res.status(500).json({ success: false, message: "সার্ভার এরর" });
+    }
+});
+
 
 
 module.exports = router;
