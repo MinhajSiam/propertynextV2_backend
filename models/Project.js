@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    location: { type: String, required: true },
-    status: { type: String, required: true, default: 'upcoming' },
-    mainImage: { type: String, required: true },
+    title: { type: String },
+    location: { type: String },
+    status: { type: String, default: 'upcoming' },
+    mainImage: { type: String },
 
     landArea: { type: String },
     facing: { type: String },
