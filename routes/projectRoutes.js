@@ -77,4 +77,24 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// প্রজেক্ট আপডেট (Edit) করার API
+router.put('/:id', async (req, res) => {
+    try {
+        const updatedProject = await Project.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true } // নতুন আপডেট হওয়া ডেটা রিটার্ন করবে
+        );
+
+        if (!updatedProject) {
+            return res.status(404).json({ success: false, message: "প্রজেক্টটি খুঁজে পাওয়া যায়নি" });
+        }
+
+        res.status(200).json({ success: true, data: updatedProject, message: "প্রজেক্ট সফলভাবে আপডেট হয়েছে" });
+    } catch (error) {
+        console.error("Error updating project:", error);
+        res.status(500).json({ success: false, message: "সার্ভার এরর" });
+    }
+});
+
 module.exports = router;
