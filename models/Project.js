@@ -26,8 +26,6 @@ const projectSchema = new mongoose.Schema({
     // floorPlanB: { type: String },
     // groundFloorPlan: { type: String },
 
-    // পুরনো ৩টি লাইনের বদলে এই নতুন লাইনটি দেওয়া হলো যাতে ভবিষ্যতে আরও ফ্লোর প্ল্যান যুক্ত করা যায় সহজে
-    floorPlans: { type: [String], default: [] },
 
     videoUrl: { type: String },
     mapUrl: { type: String },
