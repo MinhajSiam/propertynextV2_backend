@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 // লিড রাউট যুক্ত করুন
 app.use('/api/leads', require('./routes/leadRoutes'));
+app.use('/api/blogs', require('./routes/blogRoutes'));
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
