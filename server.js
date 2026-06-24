@@ -27,6 +27,9 @@ mongoose.connect(process.env.MONGO_URI)
 const projectRoutes = require('./routes/projectRoutes');
 app.use('/api/projects', projectRoutes); // সব প্রজেক্ট রাউট /api/projects দিয়ে শুরু হবে
 
+const blogRoutes = require('./routes/blogRoutes');
+app.use('/api/blogs', blogRoutes);
+
 
 // Basic Test Route
 app.get('/', (req, res) => {
