@@ -7,7 +7,7 @@ router.post('/add', async (req, res) => {
     try {
         const newBlog = new Blog(req.body);
         await newBlog.save();
-        res.status(201).json({ success: true, message: "ব্লগ সফলভাবে প্রকাশ হয়েছে! 🎉" });
+        res.status(201).json({ success: true, message: "ব্লগ সফলভাবে প্রকাশ হয়েছে!" });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
