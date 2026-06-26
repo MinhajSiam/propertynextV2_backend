@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Blog = require('../models/blog');
+const blog = require('../models/blog');
 
 // ১. ব্লগ যোগ করা
 router.post('/add', async (req, res) => {
