@@ -7,4 +7,4 @@ const blogSchema = new mongoose.Schema({
     content: { type: String, required: true },
 }, { timestamps: true }); // এটি অটোমেটিকভাবে ব্লগ তৈরির তারিখ (date) সেভ করে রাখবে
 
-module.exports = mongoose.model('Blog', blogSchema);
+module.exports = mongoose.model('blog', blogSchema);
